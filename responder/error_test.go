@@ -128,3 +128,37 @@ func TestErrorMessage_Error(t *testing.T) {
 		})
 	}
 }
+
+func TestMessage_MarshalBinary(t *testing.T) {
+	type fields struct {
+		Meta interface{}
+		Data interface{}
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		want    []byte
+		wantErr assert.ErrorAssertionFunc
+	}{
+		{
+			"testing with empty struct and nil",
+			fields{
+				struct{}{},
+				struct{}{},
+			},
+			nil,
+			nil,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			i := &Message{
+				Meta: tt.fields.Meta,
+				Data: tt.fields.Data,
+			}
+			got, err := i.MarshalBinary()
+			assert.Nil(t, err)
+			assert.NotNil(t, got)
+		})
+	}
+}
